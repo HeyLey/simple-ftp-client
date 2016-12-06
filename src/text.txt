@@ -1,0 +1,108 @@
+/*
+    public synchronized boolean stor(File file) throws IOException {
+        if (file.isDirectory()) {
+            throw new IOException("SimpleFTP cannot upload a directory.");
+        }
+
+        String filename = file.getName();
+
+        return stor(new FileInputStream(file), filename);
+    }
+
+    public synchronized boolean stor(InputStream inputStream, String filename)
+            throws IOException {
+
+        BufferedInputStream input = new BufferedInputStream(inputStream);
+
+        sendLine("PASV");
+        String response = readLine();
+        if (!response.startsWith("227 ")) {
+            throw new IOException("SimpleFTP could not request passive mode: "
+                    + response);
+        }
+
+        String ip = null;
+        int port = -1;
+        int opening = response.indexOf('(');
+        int closing = response.indexOf(')', opening + 1);
+        if (closing > 0) {
+            String dataLink = response.substring(opening + 1, closing);
+            StringTokenizer tokenizer = new StringTokenizer(dataLink, ",");
+            try {
+                ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "."
+                        + tokenizer.nextToken() + "." + tokenizer.nextToken();
+                port = Integer.parseInt(tokenizer.nextToken()) * 256
+                        + Integer.parseInt(tokenizer.nextToken());
+            } catch (Exception e) {
+                throw new IOException("SimpleFTP received bad data link information: "
+                        + response);
+            }
+        }
+
+        sendLine("STOR " + filename);
+        System.out.println("Send: " + "stor " + filename);
+
+        Socket dataSocket = new Socket(ip, port);
+
+        response = readLine();
+        if (!response.startsWith ("125 ")) {
+            //if (!response.startsWith("150 ")) {
+            throw new IOException("SimpleFTP was not allowed to send the file: "
+                    + response);
+        }
+
+        BufferedOutputStream output = new BufferedOutputStream(dataSocket
+                .getOutputStream());
+        byte[] buffer = new byte[4096];
+        int bytesRead = 0;
+        while ((bytesRead = input.read(buffer)) != -1) {
+            output.write(buffer, 0, bytesRead);
+        }
+        output.flush();
+        output.close();
+        input.close();
+
+        response = readLine();
+        return response.startsWith("226 ");
+    }
+
+
+    public synchronized boolean bin() throws IOException {
+        sendLine("TYPE I");
+        String response = readLine();
+        return (response.startsWith("200 "));
+    }
+
+    public synchronized boolean ascii() throws IOException {
+        sendLine("TYPE A");
+        String response = readLine();
+        return (response.startsWith("200 "));
+    }
+
+     */
+
+       /*  if (!response.startsWith ("150 ")) {
+                 throw new IOException("SimpleFTP was not allowed to send the file: "
+                         + response);
+             } */
+
+
+
+       /* if (!response.startsWith("230 ")) {
+            throw new IOException(
+                    "SimpleFTP was unable to log in with the supplied password: "
+                            + response);
+        } */
+
+        /* if (!response.startsWith("331 ")) {
+                    throw new IOException(
+                            "SimpleFTP received an unknown response after sending the user: "
+                                    + response);
+                } */
+
+
+                /*  if (!response.startsWith("220 ")) {
+                            throw new IOException(
+                                    "SimpleFTP received an unknown response when connecting to the FTP server: "
+                                            + response);
+                        } */

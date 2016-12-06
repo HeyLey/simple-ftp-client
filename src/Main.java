@@ -1,5 +1,3 @@
-import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 
 
@@ -15,7 +13,7 @@ public class Main {
         client.cwd("images");
         client.pwd();
         client.list();
-       // client.retr();
+        client.retr("UserTroubleshootingPic1.JPG");
         client.disconnect();
     }
 

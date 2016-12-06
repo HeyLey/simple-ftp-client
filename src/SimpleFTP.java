@@ -152,8 +152,50 @@ public class SimpleFTP {
         System.out.println(response);
     }
 
-    public synchronized void retr(File file) throws IOException {
+    public synchronized void retr(String file) throws IOException {
+        sendLine("PASV");
+        System.out.println("Send: pasv");
+        String response = readLine();
+        System.out.println(response);
+        String ip = null;
+        int port = -1;
+        int opening = response.indexOf('(');
+        int closing = response.indexOf(')', opening + 1);
+        if (closing > 0) {
+            String dataLink = response.substring(opening + 1, closing);
+            StringTokenizer tokenizer = new StringTokenizer(dataLink, ",");
+            try {
+                ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "."
+                        + tokenizer.nextToken() + "." + tokenizer.nextToken();
+                port = Integer.parseInt(tokenizer.nextToken()) * 256
+                        + Integer.parseInt(tokenizer.nextToken());
+            } catch (Exception e) {
+                throw new IOException("SimpleFTP received bad data link information: "
+                        + response);
+            }
+        }
 
+        sendLine("RETR " + file);
+        System.out.println("Send: " + "retr " + file);
+
+        Socket dataSocket = new Socket(ip, port);
+        BufferedInputStream input = new BufferedInputStream(dataSocket.getInputStream());
+        BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(file));
+
+        response = readLine();
+        System.out.println(response);
+
+
+        byte[] buffer = new byte[4096];
+        int bytesRead = 0;
+        while ((bytesRead = input.read(buffer)) != -1) {
+            output.write(buffer, 0, bytesRead);
+        }
+        output.close();
+        input.close();
+
+        response = readLine();
+        System.out.println(response);
     }
 
     private void sendLine(String line) throws IOException {
@@ -179,6 +221,7 @@ public class SimpleFTP {
         }
         return line;
     }
+
 
     private Socket socket = null;
 
